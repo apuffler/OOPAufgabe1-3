@@ -6,7 +6,7 @@ public class DeadWood extends Wood{
         super(amount);
         if(additionPerYear < 0)
             throw new IllegalArgumentException("DeadWood: Addition per year can't be below zero");
-        if(decayPerYear < 0.0 || decayPerYear > 0.0)
+        if(decayPerYear < 0.0 || decayPerYear > 1.0)
             throw new IllegalArgumentException("DeadWood: Decay per year has to be between 0.0 and 1.0");
         this.additionPerYear = additionPerYear;
         this.decayPerYear = decayPerYear;
