@@ -6,6 +6,7 @@ TODO:
 
 BUGS:
 -Limit decay (and other procentual values) to 0-1, (e.g) if parameter is 1.1F negative values can appear.
-
+-Changing parameters while simulation is running can yield negative values.
 REFACTORS:
 -apuffler: Refactoring: toString() zu Forest hinzugefügt. Fixed table inconsistency. Added getYear(). (Should we also do a setYear? Emulating a timemachine by calling update in a row).	
+
