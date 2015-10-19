@@ -17,6 +17,8 @@ public class DeadWood extends Wood{
     }
 
     public void setAdditionPerYear(int additionPerYear){
+        if(additionPerYear < 0)
+            throw new IllegalArgumentException("DeadWood: Addition per year can't be below zero");
         this.additionPerYear = additionPerYear;
     }
 
@@ -25,6 +27,8 @@ public class DeadWood extends Wood{
     }
 
     public void setDecayPerYear(float decayPerYear){
+        if(decayPerYear < 0.0 || decayPerYear > 1.0)
+            throw new IllegalArgumentException("DeadWood: Decay per year has to be between 0.0 and 1.0");
         this.decayPerYear = decayPerYear;
     }
 
