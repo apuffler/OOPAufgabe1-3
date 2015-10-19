@@ -16,6 +16,8 @@ abstract class Wood{
     }
 
     public void setAmount(int amount){
+        if(amount < 0)
+            throw new IllegalArgumentException("Wood: Amount-Value must be greater than zero.");
         this.amount = amount;
     }
 }
