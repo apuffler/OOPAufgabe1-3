@@ -4,6 +4,10 @@ public class HarvestedWood extends Wood{
 
     public HarvestedWood(int amount, int harvestPerYear, float usagePerYear){
         super(amount);
+        if(harvestPerYear < 0)
+            throw new IllegalArgumentException("HarvestedWood: Harvest per year can't be below zero");
+        if(usagePerYear < 0.0 || usagePerYear > 0.0)
+            throw new IllegalArgumentException("HarvestedWood: Usage per year has to be between 0.0 and 1.0");
         this.harvestPerYear = harvestPerYear;
         this.usagePerYear = usagePerYear;
     }
