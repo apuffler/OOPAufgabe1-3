@@ -90,7 +90,8 @@ public class Forest{
 
     public String toString()
     {
-        return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.getYear(),livingWood.getAmount(), deadWood.getAmount(), harvestedWood.getAmount(), totallyUsedWood, co2.getBoundCO2());
+        int currentlyBoundCO2 = (co2.getBoundCO2()-co2.getReleasedCO2() < 0 ? 0 : co2.getBoundCO2()-co2.getReleasedCO2());
+        return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.getYear(),livingWood.getAmount(), deadWood.getAmount(), harvestedWood.getAmount(), totallyUsedWood, currentlyBoundCO2 );
     }
 
     public void updateForest(){
