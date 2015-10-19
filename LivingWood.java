@@ -2,8 +2,8 @@ public class LivingWood extends Wood{
     private int additionPerYear;
 
     public LivingWood(int amount, int additionPerYear){
-        if(amount < 0)
-            throw new IllegalArgumentException("LivingWood: Addition per year can not be below zero");
+        if(additionPerYear < 0)
+            throw new IllegalArgumentException("LivingWood: Addition-per-year must be greater than zero.");
         super(amount);
         this.additionPerYear = additionPerYear;
     }
