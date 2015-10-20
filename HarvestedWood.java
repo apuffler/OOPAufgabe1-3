@@ -32,8 +32,14 @@ public class HarvestedWood extends Wood{
         this.usagePerYear = usagePerYear;
     }
 
-    public void updateWood(int decayedWood){
+    public int usedWood(){
+        // This needs to be changed so that amounts can reach zero
+        int used = (int)(this.amount * this.usagePerYear);
         this.amount *= (1 - this.usagePerYear);
-        this.amount += this.harvestPerYear - decayedWood;
+        return used;
+    }
+
+    public void updateWood(int addition){
+        this.amount += addition;
     }
 }
