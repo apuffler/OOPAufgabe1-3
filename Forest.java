@@ -25,6 +25,12 @@ public class Forest{
         return this.year;
     }
 
+    /*Getter for CO2*/
+    public int getBoundCO2()
+    {
+        return this.co2.getBoundCO2();
+    }
+
 
     /** Getter and Setter for LivingWood*/
 

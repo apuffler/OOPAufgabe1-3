@@ -1,82 +1,112 @@
-
 import java.util.ArrayList;
 /*
 Erste Überlegungen zur Herangehensweise sowie Diskussion über das Verständnis der Angabe erfolgten als Teamarbeit.
-Armin Puffler (1225268): Klassendiagramm, Arbeitsaufteilung, Test.java, Refakoring: toString() zu Forest hinzugefügt. Fixed table inconsistency. Added getYear(). (Should we also do a setYear? Emulating a the difference in years in a row)	
+Armin Puffler (1225268): Klassendiagramm, Arbeitsaufteilung, Test.java, Refakoring: toString() zu Forest hinzugefügt. Fixed table inconsistency. Added getYear(). More tests ( I know, could be more elegant.)	
 Jovan Zivanovic (1426514): Wood.java, LivingWood.java, CO2.java, DeadWood.java. 
 Stefan Buttenhauser (0926720): Forest.java, HarvestedWood.java, Exceptions hinzugefügt, Bugfixes zur Verhinderung von Negativwerten
 
 */
 
-/*
-TODO:
-
-
-
-BUGS:
-Limit decay to 0-1, (e.g) if parameter is 1.1F negative values can appear.
-Alternatively, never allow parameters to go below 0.
-
-
-
-*/
-
-
 
 public class Test
 {
-	/*
+	
 
-	public class LivingWoodTest
+
+	public static boolean  zeroSumTest(Forest f)
 	{
+		int co2zero = f.getBoundCO2() - (f.getHarvestedWood() + f.getLivingWood() + f.getDeadWood());  
+		return co2zero == 0;
+	}
 
+	public static boolean nonNegativeTest(Forest f)
+	{
+		return f.getLivingWood() >= 0 && f.getDeadWood() >= 0 && f.getHarvestedWood() >= 0 && f.getTotallyUsedWood() >= 0;  
+	}
 
-		public boolean test()
-		{
-			boolean passed = False;
-			try
-			{
-
-
-				ArrayList<LivingWood> lwTests = new ArrayList<LivingWood>();
-				for(int i = 0; i< 5; i++)
-				{
-					for(int j = 0; j< 5; j++)
-					{
-					lwTests.add(new LivingWood(i,j));
-					}
-				}
-
-
-				for (int i = 0; i < lwTests.length; i++)
-				{
-
-
-				}
-
-			}
-			catch(Exception ex)
-			{
-				return False;
-			}
-
-		}			
-
-
-
-	}*/
 
 
 	public static void main(String[] args)
 	{
 
-		//CO2 c = new CO2();
-		//System.out.println(c);
+
+		boolean passed = true;
+
+
+		System.out.println("Testing negative parameters.");
+		{
+			LivingWood l = null;
+			DeadWood d = null;
+			HarvestedWood h = null;
+			Forest f = null;
+		try
+		{
+		 l = new LivingWood(-1,-1);
+		}
+		catch (Exception ex)
+		{
+			System.out.println(ex);
+			passed = false;
+		}	
+
+		try
+		{
+		  d = new DeadWood(-1,-1,-1F); 
+		}
+		catch (Exception ex)
+		{
+			System.out.println(ex);
+			passed = false;
+		}	
+
+		try
+		{
+		  h = new HarvestedWood(-1,-1,-1F);
+		}
+		catch (Exception ex)
+		{
+			System.out.println(ex);
+			passed = false;
+		}		
+
+
+		try
+		{
+		  if(l != null && d != null && h != null)
+		  {	
+		  		f = new Forest(l,d,h);
+		  		for(int i = 0; i<10; i++)
+				{
+					f.updateForest();
+					passed = passed && zeroSumTest(f);
+					passed = passed && nonNegativeTest(f);
+				}
+		  }
+		}
+		catch (Exception ex)
+		{
+			System.out.println(ex);
+			passed = false;
+		}	
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
+		
+		
+		System.out.println(f.getOutputTable());
+		}
+
 		
 
+
+		System.exit(0);
+
+		System.out.println("Testing Harvestedwood: amount=1,harvest=1,usage=1F");
+		
 		{
-		//If usage per year is 100%, why is there still harvestedWood left? Revisit order of operation, eg. usage or addition first?
-		//Also, LivingWood goes negative!
+		
 		LivingWood l = new LivingWood(0,0);
 		DeadWood d = new DeadWood(0,0,0F); 
 		HarvestedWood h = new HarvestedWood(1,1,1F);
@@ -84,14 +114,24 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			System.out.println(passed);
+			passed = passed && nonNegativeTest(f);
+			System.out.println(passed);
 
 		}
 		System.out.println(f.getOutputTable());
 		}
 
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
 
 
+		System.out.println("Testing Harvestedwood: amount=1,addition=1,decay=1F");
 		
 		{
 		//If decay per year is 100%, why is there still deadWood left? Revisit order of operation, eg. decay or addition first?
@@ -103,14 +143,20 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 
 		}
 		System.out.println(f.getOutputTable());
 		}
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
 
-
-
+		System.out.println("Testing: all parameters are 0");
 		{
 		//All 0 Edge Case
 		LivingWood l = new LivingWood(0,0);
@@ -120,11 +166,20 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		System.out.println(f.getOutputTable());
 		}
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
 
+
+		System.out.println("Testing: all parameters are 1");
 		{
 		//All 1 Edge Case
 		LivingWood l = new LivingWood(1,1);
@@ -134,10 +189,16 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		System.out.println(f.getOutputTable());
 		}
-
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
 
 
@@ -145,7 +206,7 @@ public class Test
 		//=====================================================
 
 
-
+		System.out.println("Testing: Changing parameters between two simulation runs.");
 		//Changing Parameters between two updates
 		{
 		LivingWood l = new LivingWood(10,2);
@@ -155,17 +216,26 @@ public class Test
 		for(int i = 0; i<=5; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		f.setHarvestPerYear(1000);
 		for(int i = 0; i<=5; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		System.out.println(f.getOutputTable());
 		}
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
 
-
+		System.out.println("Testing Harvestedwood: amount=1,addition=1,decay=0F");
 		{
 		//Negative values still appear in LivingWood
 		LivingWood l = new LivingWood(0,0);
@@ -175,12 +245,18 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		System.out.println(f.getOutputTable());
 		}
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
-
-
+		System.out.println("Testing mixed parameters.");
 		{
 		//Harvestedwood is decreasing (since it's been used) but never releasing CO2.
 		LivingWood l = new LivingWood(1,0);
@@ -190,11 +266,19 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		System.out.println(f.getOutputTable());
 		}
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
 
+		System.out.println("Testing Deadwood: amount=2,addition=0,decay=0.1F. Relevant for proper decay testing.");
 		{
 		//Deadwood is decreasing (since it's decaying) but never releasing CO2.
 		LivingWood l = new LivingWood(0,0);
@@ -204,12 +288,18 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		System.out.println(f.getOutputTable());
 		}
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
-
-
+		System.out.println("Testing Deadwood: amount=0,addition=2,decay=0.0F. Relevant for Livingwood decease testing.");
 		{
 		//Livingwood never gets decreased even though DeadWood is gaining amount.
 		LivingWood l = new LivingWood(10,0);
@@ -219,20 +309,26 @@ public class Test
 		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
+			passed = passed && zeroSumTest(f);
+			passed = passed && nonNegativeTest(f);
 		}
 		System.out.println(f.getOutputTable());
 		}
+		if(!passed)
+		{
+			System.out.println("TEST NOT PASSED!");
+			return;
+		}
 
+		if(passed)
+		{
+			System.out.println("PASSED ALL TESTS!");
+			return;
+		}
 
 		
-
+	
 		
-		//Still important to check!: Does decay work properly, since float and int operate together?
-
-		
-
-		
-
 
 
 		//Mass Testing
@@ -341,31 +437,12 @@ public class Test
 
 			System.out.println("Finished change decay.");
 		}
-		catch(IllegalArgumentException e)
+		catch(Exception e)
 		{
-
+			System.out.println(e);
 		}
 
-			System.out.println(lwTests.size());
-			System.out.println(dwTests.size());
-			System.out.println(hwTests.size());
-			System.out.println(forestTests.size());
-
-			System.out.println(forestTests.get(0).getOutputTable());
-			System.out.println(forestTests.get(10).getOutputTable());
-			System.out.println(forestTests.get(100).getOutputTable());
-			System.out.println(forestTests.get(120).getOutputTable());
-			System.out.println(forestTests.get(150).getOutputTable());	
-			System.out.println(forestTests.get(159).getOutputTable());	
-
-			for(Forest f : forestTests)
-			{
-				if (f.getLivingWood() > 0)
-				{
-					System.out.println(f.getOutputTable());
-				}
-
-			}
+			
 		}
 
 				
