@@ -20,7 +20,18 @@ public class LivingWood extends Wood{
         this.additionPerYear = additionPerYear;
     }
 
-    public void updateWood(int harvestedAmount){
-        this.amount += additionPerYear - harvestedAmount;
+    public void yearlyAddition(){
+        this.amount += this.additionPerYear;
+    }
+
+    public int updateWood(int reduceAmount){
+        if(this.amount >= reduceAmount){
+            this.amount -= reduceAmount;
+            return reduceAmount;
+        }else{
+            reduceAmount = this.amount;
+            this.amount = 0;
+            return reduceAmount;
+        }
     }
 }
