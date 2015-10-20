@@ -32,8 +32,12 @@ public class DeadWood extends Wood{
         this.decayPerYear = decayPerYear;
     }
 
-    public void updateWood(){
+    public void decayWood(){
+        // This needs to be changed so that amounts can reach zero
         this.amount *= (1 - this.decayPerYear);
-        this.amount += this.additionPerYear;
+    }
+
+    public void updateWood(int addition){
+        this.amount += addition;
     }
 }
