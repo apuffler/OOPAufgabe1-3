@@ -2,6 +2,7 @@
 
 TODO:
 -Exceptions werfen falls unsinnige Werte in Konstruktoren übergeben werden. (oder eventuell auch nie parameter unter 0 erlauben).
+- HarvestedWood usedWood() & DeadWood decayWood() so anpassen, dass durch % Werte 0 erreicht werden kann, alle Werte stimmen.
 
 
 BUGS:
