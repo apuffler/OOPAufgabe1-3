@@ -16,7 +16,7 @@ public class Forest{
         this.co2.setBoundCO2(this.livingWood.getAmount() + this.harvestedWood.getAmount() + this.deadWood.getAmount());
         this.year = 0;
         this.outputTable = String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", "Year", "LivingWood", "DeadWood", "HarvestedWood", "UsedWood", "BoundCO2");
-        this.outputTable += String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.year, this.livingWood.getAmount(), this.deadWood.getAmount(), this.harvestedWood.getAmount(), this.totallyUsedWood, this.co2.getBoundCO2());
+        this.outputTable += this.toString();
     }
 
 
@@ -96,7 +96,7 @@ public class Forest{
 
     public void updateForest(){
         totallyUsedWood += harvestedWood.getHarvestPerYear();
-
+        
         deadWood.updateWood();
         harvestedWood.updateWood(deadWood.getAdditionPerYear());
         livingWood.updateWood(harvestedWood.getHarvestPerYear());
