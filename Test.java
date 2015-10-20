@@ -4,7 +4,7 @@ import java.util.ArrayList;
 Erste Überlegungen zur Herangehensweise sowie Diskussion über das Verständnis der Angabe erfolgten als Teamarbeit.
 Armin Puffler (1225268): Klassendiagramm, Arbeitsaufteilung, Test.java, Refakoring: toString() zu Forest hinzugefügt. Fixed table inconsistency. Added getYear(). (Should we also do a setYear? Emulating a the difference in years in a row)	
 Jovan Zivanovic (1426514): Wood.java, LivingWood.java, CO2.java, DeadWood.java. 
-Stefan Buttenhauser (0926720): Forest.java, HarvestedWood.java, Exceptions hinzugefügt
+Stefan Buttenhauser (0926720): Forest.java, HarvestedWood.java, Exceptions hinzugefügt, Bugfixes zur Verhinderung von Negativwerten
 
 */
 
