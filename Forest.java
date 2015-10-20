@@ -91,18 +91,41 @@ public class Forest{
     public String toString()
     {
         //int currentlyBoundCO2 = (co2.getBoundCO2()-co2.getReleasedCO2() < 0 ? 0 : co2.getBoundCO2()-co2.getReleasedCO2());
-        return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.getYear(),livingWood.getAmount(), deadWood.getAmount(), harvestedWood.getAmount(), totallyUsedWood, this.co2.getBoundCO2() );
+        return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.getYear(), livingWood.getAmount(), deadWood.getAmount(), harvestedWood.getAmount(), totallyUsedWood, this.co2.getBoundCO2());
     }
 
     public void updateForest(){
+        this.year++;
+        this.totallyUsedWood += this.harvestedWood.usedWood();
+        this.deadWood.decayWood();
+        this.livingWood.yearlyAddition();
+        // increase deadWood by addition per year or amount of livingWood if not enough remaining & reduces livingWood by corresponding amount
+        this.deadWood.updateWood(this.livingWood.updateWood(this.deadWood.getAdditionPerYear()));
+        // increase harvestedWood by addition per year or amount of livingWood if not enough remaining & reduces livingWood by corresponding amount
+        this.harvestedWood.updateWood(this.livingWood.updateWood(this.harvestedWood.getHarvestPerYear()));
+
+
+        this.co2.setBoundCO2(this.harvestedWood.getAmount() + this.livingWood.getAmount() + this.deadWood.getAmount());
+        /*
+            !add livingwood addition per year
+            !reduce livingwood by new deadwood - check amount
+            !update amount of deadwood
+            !reduce livingwood by harvest - check amount
+            !reduce harvestedwood by usage - check amount
+            !increase totallyUsedWood
+            !update amount of harvestedWood
+
+            !set amount of bound co2
+
+
+
         totallyUsedWood += harvestedWood.getHarvestPerYear();
         
         deadWood.updateWood();
         harvestedWood.updateWood(deadWood.getAdditionPerYear());
         livingWood.updateWood(harvestedWood.getHarvestPerYear());
-        this.year++;
+        */
         this.outputTable += this.toString();
-        this.co2.setBoundCO2(this.harvestedWood.getAmount() + this.livingWood.getAmount() + this.deadWood.getAmount());
     }
     
     public void updateForest(int simulatedTimeSpan){
