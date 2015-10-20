@@ -90,8 +90,8 @@ public class Forest{
 
     public String toString()
     {
-        int currentlyBoundCO2 = (co2.getBoundCO2()-co2.getReleasedCO2() < 0 ? 0 : co2.getBoundCO2()-co2.getReleasedCO2());
-        return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.getYear(),livingWood.getAmount(), deadWood.getAmount(), harvestedWood.getAmount(), totallyUsedWood, currentlyBoundCO2 );
+        //int currentlyBoundCO2 = (co2.getBoundCO2()-co2.getReleasedCO2() < 0 ? 0 : co2.getBoundCO2()-co2.getReleasedCO2());
+        return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.getYear(),livingWood.getAmount(), deadWood.getAmount(), harvestedWood.getAmount(), totallyUsedWood, this.co2.getBoundCO2() );
     }
 
     public void updateForest(){
@@ -102,6 +102,7 @@ public class Forest{
         livingWood.updateWood(harvestedWood.getHarvestPerYear());
         this.year++;
         this.outputTable += this.toString();
+        this.co2.setBoundCO2(this.harvestedWood.getAmount() + this.livingWood.getAmount() + this.deadWood.getAmount());
     }
 
     public int getTotallyUsedWood(){
