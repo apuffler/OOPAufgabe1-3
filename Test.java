@@ -74,6 +74,125 @@ public class Test
 		//System.out.println(c);
 		
 
+		{
+		//If usage per year is 100%, why is there still harvestedWood left? Revisit order of operation, eg. usage or addition first?
+		//Also, LivingWood goes negative!
+		LivingWood l = new LivingWood(0,0);
+		DeadWood d = new DeadWood(0,0,0F); 
+		HarvestedWood h = new HarvestedWood(1,1,1F);
+		Forest f = new Forest(l,d,h);
+		for(int i = 0; i<10; i++)
+		{
+			f.updateForest();
+
+		}
+		System.out.println(f.getOutputTable());
+		}
+
+
+
+
+		
+		{
+		//If decay per year is 100%, why is there still deadWood left? Revisit order of operation, eg. decay or addition first?
+		//Also, HarvestedWood goes negative!
+		LivingWood l = new LivingWood(0,0);
+		DeadWood d = new DeadWood(1,1,1F); 
+		HarvestedWood h = new HarvestedWood(0,0,0F);
+		Forest f = new Forest(l,d,h);
+		for(int i = 0; i<10; i++)
+		{
+			f.updateForest();
+
+		}
+		System.out.println(f.getOutputTable());
+		}
+
+
+
+
+		{
+		//All 0 Edge Case
+		LivingWood l = new LivingWood(0,0);
+		DeadWood d = new DeadWood(0,0,0.0F);
+		HarvestedWood h = new HarvestedWood(0,0,0F);
+		Forest f = new Forest(l,d,h);
+		for(int i = 0; i<10; i++)
+		{
+			f.updateForest();
+		}
+		System.out.println(f.getOutputTable());
+		}
+
+
+		{
+		//All 1 Edge Case
+		LivingWood l = new LivingWood(1,1);
+		DeadWood d = new DeadWood(1,1,1F);
+		HarvestedWood h = new HarvestedWood(1,1,1F);
+		Forest f = new Forest(l,d,h);
+		for(int i = 0; i<10; i++)
+		{
+			f.updateForest();
+		}
+		System.out.println(f.getOutputTable());
+		}
+
+
+
+
+		//Tests below this point reveal bugs!
+		//=====================================================
+
+
+
+		//Changing Parameters between two updates
+		{
+		LivingWood l = new LivingWood(10,2);
+		DeadWood d = new DeadWood(1,1,1F);
+		HarvestedWood h = new HarvestedWood(1,1,1F);
+		Forest f = new Forest(l,d,h);
+		for(int i = 0; i<=5; i++)
+		{
+			f.updateForest();
+		}
+		f.setHarvestPerYear(1000);
+		for(int i = 0; i<=5; i++)
+		{
+			f.updateForest();
+		}
+		System.out.println(f.getOutputTable());
+		}
+
+
+
+		{
+		//Negative values still appear in LivingWood
+		LivingWood l = new LivingWood(0,0);
+		DeadWood d = new DeadWood(0,0,0.0F);
+		HarvestedWood h = new HarvestedWood(1,1,0F);
+		Forest f = new Forest(l,d,h);
+		for(int i = 0; i<10; i++)
+		{
+			f.updateForest();
+		}
+		System.out.println(f.getOutputTable());
+		}
+
+
+
+		{
+		//Harvestedwood is decreasing (since it's been used) but never releasing CO2.
+		LivingWood l = new LivingWood(1,0);
+		DeadWood d = new DeadWood(0,0,0.0F);
+		HarvestedWood h = new HarvestedWood(1,0,0.5F);
+		Forest f = new Forest(l,d,h);
+		for(int i = 0; i<10; i++)
+		{
+			f.updateForest();
+		}
+		System.out.println(f.getOutputTable());
+		}
 
 
 		{
@@ -82,7 +201,7 @@ public class Test
 		DeadWood d = new DeadWood(2,0,0.1F);
 		HarvestedWood h = new HarvestedWood(0,0,0.0F);
 		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<100; i++)
+		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
 		}
@@ -90,13 +209,14 @@ public class Test
 		}
 
 
+
 		{
-		//Livingwood never gets decreased
+		//Livingwood never gets decreased even though DeadWood is gaining amount.
 		LivingWood l = new LivingWood(10,0);
 		DeadWood d = new DeadWood(0,2,0.0F);
 		HarvestedWood h = new HarvestedWood(0,0,0.0F);
 		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<100; i++)
+		for(int i = 0; i<10; i++)
 		{
 			f.updateForest();
 		}
@@ -104,31 +224,13 @@ public class Test
 		}
 
 
-		{
-		//Negative values still appear in HarvestedWood
-		LivingWood l = new LivingWood(10,1);
-		DeadWood d = new DeadWood(0,2,0.4F);
-		HarvestedWood h = new HarvestedWood(0,1,0.5F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<100; i++)
-		{
-			f.updateForest();
-		}
-		System.out.println(f.getOutputTable());
-		}
+		
 
-		{
-		//Edge case! 1 DeadWood unit never vanishes, the int always gets rounded up.
-		LivingWood l = new LivingWood(2,2);
-		DeadWood d = new DeadWood(1,1,0.1F);
-		HarvestedWood h = new HarvestedWood(0,0,0.0F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<100; i++)
-		{
-			f.updateForest();
-		}
-		System.out.println(f.getOutputTable());
-		}
+		
+		//Still important to check!: Does decay work properly, since float and int operate together?
+
+		
+
 		
 
 
