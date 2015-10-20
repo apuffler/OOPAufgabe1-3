@@ -107,13 +107,7 @@ public class Forest{
     
     public void updateForest(int simulatedTimeSpan){
         for(int i = 0; i < simulatedTimeSpan; ++i){
-            totallyUsedWood += harvestedWood.getHarvestPerYear();
-            deadWood.updateWood();
-            harvestedWood.updateWood(deadWood.getAdditionPerYear());
-            livingWood.updateWood(harvestedWood.getHarvestPerYear());
-            this.year++;
-            this.outputTable += this.toString();
-            this.co2.setBoundCO2(this.harvestedWood.getAmount() + this.livingWood.getAmount() + this.deadWood.getAmount());
+           this.updateForest();
         }
     }
 
