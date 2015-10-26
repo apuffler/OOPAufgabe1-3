@@ -11,3 +11,11 @@ BUGS:
 REFACTORS:
 -apuffler: Refactoring: toString() zu Forest hinzugefügt. Fixed table inconsistency. Added getYear(). (Should we also do a setYear? Emulating a timemachine by calling update in a row).	
 
+
+
+
+===========
+Aufteilung (2te Aufgabe):
+Jovan: Simulation 
+Stefan: Forest + Tests
+Armin: Models (ClimateModel, EconomyModel und dazu gehörige Klassen)
