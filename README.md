@@ -14,7 +14,9 @@ REFACTORS:
 
 
 ===========
+
 Klassendiagramm-Visualizer: https://www.draw.io/
+
 ===========
 Aufteilung (2te Aufgabe):
 Jovan: Simulation 
