@@ -20,7 +20,7 @@ public class ScatterGraph extends SimulationGraph{
 			double x = coordinates.getFirst() - this.radius;
 			double y = coordinates.getSecond() - this.radius;
 
-			g2D.draw(new Ellipse2D.Double(y, x, this.radius * 2, this.radius * 2));	
+			g2D.draw(new Ellipse2D.Double(x, y, this.radius * 2, this.radius * 2));	
 		}
 	}
 }
