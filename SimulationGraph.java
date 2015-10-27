@@ -103,11 +103,21 @@ abstract class SimulationGraph extends JPanel{
 	public void paintComponent(Graphics g){
 		Graphics2D g2D = (Graphics2D)g;
 
-		g2D.translate(0, this.graphHeight);
-		g2D.rotate(Math.toRadians(-90));
+			
+		
 
-		g2D.translate(20, 20);
+		g2D.translate(0, graphHeight);
+		g2D.translate(20, -20);
+		g2D.scale(1, -1);	
 
+		g2D.draw(new Line2D.Double(0, 0, 0, graphHeight - 20));
+		g2D.draw(new Line2D.Double(0, 0, graphWidth - 20, 0));
+
+		g2D.draw(new Line2D.Double(0, graphHeight - 20, -7, graphHeight - 27));
+		g2D.draw(new Line2D.Double(0, graphHeight - 20, 7, graphHeight - 27));
+
+		g2D.draw(new Line2D.Double(graphWidth - 20, 0, graphWidth - 37, 7));
+		g2D.draw(new Line2D.Double(graphWidth - 20, 0, graphWidth - 37, -7));
 
 		this.drawGraph(g);
 	}
