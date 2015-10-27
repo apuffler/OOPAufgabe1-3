@@ -14,11 +14,13 @@ public class Environment{
         this.sunshine = sunshine;
     }
 
-    /*
+
+
+    
     public float getTemperature() {return temperature;}
     public float getPrecipitation() {return precipitation;}
     public float getSunshine() {return sunshine;}
     public float getHumidity() {return humidity;}
-    */
+    
 
 }

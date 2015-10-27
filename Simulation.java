@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 public class Simulation{
 	private EconomyModel economyModel;
 	private ClimateModel climateModel;
@@ -27,7 +28,7 @@ public class Simulation{
 	}
 
 	public void setClimateModel(ClimateModel climateModel){
-		this.ClimateModel = climateModel;
+		this.climateModel = climateModel;
 	}
 
 	public ClimateModel getClimateModel(){
@@ -35,9 +36,8 @@ public class Simulation{
 	}
 
 	public void runSimulation() {
-		//TODO: Take economy from forest and apply
-		//this.forest = this.economyModel.applyTo(this.forest);
-		this.forest = this.climateModel.applyTo(this.forest.env);
+		this.currentForest = this.economyModel.applyTo(this.currentForest.eco);
+		this.currentForest = this.climateModel.applyTo(this.currentForest.env);
 		this.forestTimeLine.add(this.currentForest.clone());
 		
 
