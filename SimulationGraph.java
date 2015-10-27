@@ -6,7 +6,10 @@ import java.awt.Color;
 import java.awt.geom.Line2D;
 
 abstract class SimulationGraph extends JPanel{
+	private final int markerLineSize = 2;
+
 	protected LinkedList<Pair<Double, Double>> graphValues;	
+	protected LinkedList<Pair<Double, Double>> scaledValues;
 
 	protected String graphName;
 	protected String xAxisName;
@@ -100,11 +103,44 @@ abstract class SimulationGraph extends JPanel{
 		this.graphBackgroundColor = backgroundColor;
 	}
 
-	public void paintComponent(Graphics g){
+	public Color getGraphColor(){
+		return this.visualizationColor;
+	}
+
+	public void setGraphColor(Color graphColor){
+		this.visualizationColor = graphColor;
+	}
+
+	private void scaleData(){
+		LinkedList<Pair<Double, Double>> newValues = new LinkedList<Pair<Double, Double>>();
+		for(int i = 0; i < this.graphValues.size(); ++i){
+			Pair<Double, Double> data = this.graphValues.get(i);
+			newValues.add(new Pair<Double, Double>(data.getFirst() * xAxisScale, data.getSecond() * yAxisScale));
+		}
+		this.scaledValues = newValues;
+	}
+
+	private void axisInformation(Graphics g){
 		Graphics2D g2D = (Graphics2D)g;
 
-			
-		
+		for(Pair<Double, Double> sValue : this.scaledValues){
+
+			double scaledX = sValue.getFirst();
+			double scaledY = sValue.getSecond();
+
+			g2D.draw(new Line2D.Double(scaledX, -this.markerLineSize, scaledX, this.markerLineSize));
+			g2D.draw(new Line2D.Double(-this.markerLineSize, scaledY, this.markerLineSize, scaledY));
+		}
+	}
+
+	public void paintComponent(Graphics g){
+		this.scaleData();
+
+		Graphics2D g2D = (Graphics2D)g;	
+
+		g2D.drawString(this.graphName, this.graphWidth / 2, 20);
+		g2D.drawString(this.xAxisName, this.graphWidth / 2, this.graphHeight - 24);
+		g2D.drawString(this.yAxisName, 24, this.graphHeight / 2);
 
 		g2D.translate(0, graphHeight);
 		g2D.translate(20, -20);
@@ -119,6 +155,9 @@ abstract class SimulationGraph extends JPanel{
 		g2D.draw(new Line2D.Double(graphWidth - 20, 0, graphWidth - 37, 7));
 		g2D.draw(new Line2D.Double(graphWidth - 20, 0, graphWidth - 37, -7));
 
+
+		this.axisInformation(g);
+		g2D.setColor(this.visualizationColor);
 		this.drawGraph(g);
 	}
 
