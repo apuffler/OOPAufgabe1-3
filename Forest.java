@@ -1,150 +1,127 @@
 
-public class Forest{
-    private LivingWood livingWood;
-    private DeadWood deadWood;
-    private HarvestedWood harvestedWood;
-    private CO2 co2;
-    private int totallyUsedWood;
-    private int year;
-    private String outputTable;
+public abstract class Forest{
+    protected int livingWoodAmount;
+    protected int harvestedWoodAmount;
+    protected int harvestedWoodHarvestPerYear;
+    protected float harvestedWoodUsagePerYear;
+    protected int deadWoodAmount;
+    protected int deadWoodAdditionPerYear;
+    protected float deadWoodDecayPerYear;
+    protected int totallyUsedWood;
+    protected int boundCO2;
+    protected Environment env;
+    protected Economy eco;
 
-    public Forest(LivingWood livingwood, DeadWood deadWood, HarvestedWood harvestedWood){
-        this.livingWood = livingwood;
-        this.harvestedWood = harvestedWood;
-        this.deadWood = deadWood;
-        this.co2 = new CO2();
-        this.co2.setBoundCO2(this.livingWood.getAmount() + this.harvestedWood.getAmount() + this.deadWood.getAmount());
-        this.year = 0;
-        this.outputTable = String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", "Year", "LivingWood", "DeadWood", "HarvestedWood", "UsedWood", "BoundCO2");
-        this.outputTable += this.toString();
+    public Forest(){
+        this.livingWoodAmount = 0;
+        this.harvestedWoodAmount = 0;
+        this.harvestedWoodHarvestPerYear = 0;
+        this.harvestedWoodUsagePerYear = 0;
+        this.deadWoodAmount = 0;
+        this.deadWoodAdditionPerYear = 0;
+        this.deadWoodDecayPerYear  = 0;
+        this.totallyUsedWood = 0;
+        this.env = new Environment(0,0,0,0);
+        this.eco = new Economy(0,0,0);
     }
 
+    public Forest(int livingWoodAmount, int harvestedWoodAmount, int harvestedWoodHarvestPerYear, float harvestedWoodUsagePerYear, int deadWoodAmount, int deadWoodAdditionPerYear, float deadWoodDecayPerYear, Environment env, Economy eco){
 
-    public int getYear()
-    {
-        return this.year;
+        // LivingWood
+        if(this.livingWoodAmount < 0)
+            throw new IllegalArgumentException("LivingWood: Amount can't be below zero.");
+        this.livingWoodAmount = livingWoodAmount;
+
+        // HarvestedWood
+        if(this.harvestedWoodAmount < 0)
+            throw new IllegalArgumentException("HarvestedWood: Amount can't be below zero.");
+        this.harvestedWoodAmount = harvestedWoodAmount;
+        if(this.harvestedWoodHarvestPerYear < 0)
+            throw new IllegalArgumentException("HarvestedWood: Harvest per year can't be below zero.");
+        this.harvestedWoodHarvestPerYear = harvestedWoodHarvestPerYear;
+        if(this.harvestedWoodUsagePerYear < 0.0 || this.harvestedWoodUsagePerYear > 1.0)
+            throw new IllegalArgumentException("HarvestedWood: Usage per year can't be below zero or above one.");
+        this.harvestedWoodUsagePerYear = harvestedWoodUsagePerYear;
+
+        // DeadWood
+        if(this.deadWoodAmount < 0)
+            throw new IllegalArgumentException("DeadWood: Amount can't be below zero.");
+        this.deadWoodAmount = deadWoodAmount;
+        if(this.deadWoodAdditionPerYear < 0)
+            throw new IllegalArgumentException("DeadWood: Addition per year can't be below zero.");
+        this.deadWoodAdditionPerYear = deadWoodAdditionPerYear;
+        if(this.deadWoodDecayPerYear < 0.0 || this.deadWoodDecayPerYear > 1.0)
+            throw new IllegalArgumentException("DeadWood: Decay per year can't be below zero or above one.");
+        this.deadWoodDecayPerYear  = deadWoodDecayPerYear;
+
+        this.env = env;
+        this.eco = eco;
     }
 
-    /*Getter for CO2*/
-    public int getBoundCO2()
-    {
-        return this.co2.getBoundCO2();
+    public void setLivingWoodAmount(int amount){
+        this.livingWoodAmount = amount;
     }
 
-
-    /** Getter and Setter for LivingWood*/
-
-    public int getLivingWood(){
-        return this.livingWood.getAmount();
+    public int getLivingWoodAmount(){
+        return this.livingWoodAmount;
     }
 
-    public void setLivingWood(int amount){
-        this.livingWood.setAmount(amount);
+    public void setHarvestedWoodAmount(int amount){
+        this.harvestedWoodAmount = amount;
     }
 
-    /** Getter and Setter for HarvestedWood*/
-
-    public int getHarvestedWood(){
-        return this.harvestedWood.getAmount();
+    public int getHarvestedWoodAmount(){
+        return this.harvestedWoodAmount;
     }
 
-    public void setHarvestedWood(int amount){
-        this.harvestedWood.setAmount(amount);
+    public void setHarvestedWoodHarvestPerYear(int harvest){
+        this.harvestedWoodHarvestPerYear = harvest;
     }
 
-    public int getHarvestPerYear(){
-        return this.harvestedWood.getHarvestPerYear();
+    public int getHarvestedWoodHarvestPerYear(){
+        return this.harvestedWoodHarvestPerYear;
     }
 
-    public void setHarvestPerYear(int harvestPerYear){
-        this.harvestedWood.setHarvestPerYear(harvestPerYear);
+    public void setHarvestedWoodUsagePerYear(float usage){
+        this.harvestedWoodUsagePerYear = usage;
     }
 
-    public float getHarvestedUsage(){
-        return this.harvestedWood.getUsagePerYear();
+    public float getHarvestedWoodUsagePerYear(){
+        return this.harvestedWoodUsagePerYear;
     }
 
-    public void setHarvestedUsage(float percent){
-        this.harvestedWood.setUsagePerYear(percent);
+    public void setDeadWoodAmount(int amount){
+        this.deadWoodAmount = amount;
     }
 
-    /** Getter and Setter for DeadWood*/
-
-    public int getDeadWood(){
-        return this.deadWood.getAmount();
+    public int getDeadWoodAmount(){
+        return this.deadWoodAmount;
     }
 
-    public void setDeadWood(int amount){
-        this.deadWood.setAmount(amount);
+    public void setDeadWoodAdditionPerYear(int addition){
+        this.deadWoodAdditionPerYear = addition;
     }
 
-    public int getDeadWoodAddition(){
-        return this.deadWood.getAdditionPerYear();
+    public int getDeadWoodAdditionPerYear(){
+        return this.deadWoodAdditionPerYear;
     }
 
-    public void setDeadWoodAddition(int additionPerYear){
-        this.deadWood.setAdditionPerYear(additionPerYear);
+    public void setDeadWoodDecayPerYear(float decay){
+        this.deadWoodDecayPerYear = decay;
     }
 
-    public float getDeadDecay(){
-        return this.deadWood.getDecayPerYear();
+    public float getDeadWoodDecayPerYear(){
+        return this.deadWoodDecayPerYear;
     }
 
-    public void setDeadDecay(float percent){
-        this.deadWood.setDecayPerYear(percent);
-    }
-
-    public String toString()
-    {
-        //int currentlyBoundCO2 = (co2.getBoundCO2()-co2.getReleasedCO2() < 0 ? 0 : co2.getBoundCO2()-co2.getReleasedCO2());
-        return String.format("| %-15s | %-15s | %-15s | %-15s | %-15s | %-15s |%n", this.getYear(), livingWood.getAmount(), deadWood.getAmount(), harvestedWood.getAmount(), totallyUsedWood, this.co2.getBoundCO2());
-    }
-
-    public void updateForest(){
-        this.year++;
-        this.totallyUsedWood += this.harvestedWood.usedWood();
-        this.deadWood.decayWood();
-        this.livingWood.yearlyAddition();
-        // increase deadWood by addition per year or amount of livingWood if not enough remaining & reduces livingWood by corresponding amount
-        this.deadWood.updateWood(this.livingWood.updateWood(this.deadWood.getAdditionPerYear()));
-        // increase harvestedWood by addition per year or amount of livingWood if not enough remaining & reduces livingWood by corresponding amount
-        this.harvestedWood.updateWood(this.livingWood.updateWood(this.harvestedWood.getHarvestPerYear()));
-
-
-        this.co2.setBoundCO2(this.harvestedWood.getAmount() + this.livingWood.getAmount() + this.deadWood.getAmount());
-        /*
-            !add livingwood addition per year
-            !reduce livingwood by new deadwood - check amount
-            !update amount of deadwood
-            !reduce livingwood by harvest - check amount
-            !reduce harvestedwood by usage - check amount
-            !increase totallyUsedWood
-            !update amount of harvestedWood
-
-            !set amount of bound co2
-
-
-
-        totallyUsedWood += harvestedWood.getHarvestPerYear();
-        
-        deadWood.updateWood();
-        harvestedWood.updateWood(deadWood.getAdditionPerYear());
-        livingWood.updateWood(harvestedWood.getHarvestPerYear());
-        */
-        this.outputTable += this.toString();
-    }
-    
-    public void updateForest(int simulatedTimeSpan){
-        for(int i = 0; i < simulatedTimeSpan; ++i){
-           this.updateForest();
-        }
+    public void setTotallyUsedWood(int amount){
+        this.totallyUsedWood = amount;
     }
 
     public int getTotallyUsedWood(){
         return this.totallyUsedWood;
     }
 
-    public String getOutputTable(){
-        return this.outputTable;
-    }
+    public abstract void updateForest(Environment e);
+
 }

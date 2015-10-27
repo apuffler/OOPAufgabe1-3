@@ -8,7 +8,7 @@ public class GraphVisualizer{
 		this.visualizationWindow = new JFrame();
 
 		this.visualizationWindow.setTitle(graph.getGraphName());
-		this.visualizationWindow.setSize(graph.getGraphWindowX(), graph.getGraphWindowY());
+		this.visualizationWindow.setSize(graph.getGraphWidth(), graph.getGraphHeight());
 
 		this.visualizationWindow.add(graph);
 		this.visualizationWindow.setVisible(true);

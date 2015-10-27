@@ -1,18 +1,21 @@
 public class Simulation{
 	private EconomyModel economyModel;
 	private ClimateModel climateModel;
-	private Forest forest;	
+	private Forest currentForest;	
+	private LinkedList<Forest> forestTimeLine; 
 
-	public Simulation(EconomyModel economyModel, ClimateModel climateModel, Forest forest){
+	public Simulation(EconomyModel economyModel, ClimateModel climateModel, Forest currentForest){
 		this.economyModel = economyModel;
 		this.climateModel = climateModel;
-		this.forest = forest;
+		this.currentForest = currentForest;
+		this.forestTimeLine = new LinkedList<Forest>();
 	}
 
 	public Simulation(){
 		this.economyModel = null;
 		this.climateModel = null;
-		this.forest = null;
+		this.currentForest = null;
+		this.forestTimeLine = new LinkedList<Forest>();
 	}
 
 	public void setEconomyModel(EconomyModel economyModel){
@@ -35,7 +38,9 @@ public class Simulation{
 		//TODO: Take economy from forest and apply
 		//this.forest = this.economyModel.applyTo(this.forest);
 		this.forest = this.climateModel.applyTo(this.forest.env);
+		this.forestTimeLine.add(this.currentForest.clone());
+		
 
-		forest.updateForest();
+		this.currentForest.updateForest();
 	}
 }
