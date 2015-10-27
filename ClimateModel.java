@@ -1,52 +1,59 @@
 import java.util.ArrayList;
-public class ClimateModel extends Model<Forest>
+import java.util.HashMap;
+public class ClimateModel extends Model<Environment>
 {
 
 	//TODO: Still need to implement Special Cases
 
-	public Forest applyTo(Forest f)
+	//private HashMap<int, Forest> specialCases = null;
+
+
+	public Environment applyTo(Environment e)
 	{
-		if(this.cyclic && conditions.size > currentYear)
+		/*
+		Forest special = 0; 
+		if specialCases != null
+		{
+			special = specialCases.get(currentYear);
+			if special != null
+		}
+		*/
+		if(this.cyclic && conditions.size() > currentYear)
 		{
 				currentYear = 0;
 		}
-		else if (conditions.size > currentYear)
+		else if (conditions.size() > currentYear)
 		{
 			//Default factors
-			f.environmentalFactors = EnvironmentalFactors(1,1,1,1);
 			currentYear++;
+			return e;
 		}
 
 		
-		f.environmentalFactors = conditions.get(this.currentYear).environmentalFactors;
+		Environment condition  = conditions.get(this.currentYear);
+		e.temperature = e.temperature * condition.temperature;
+    	e.precipitation = e.temperature * condition.temperature;
+    	e.humidity = e.humidity * condition.humidity;
+    	e.sunshine = e.sunshine * condition.sunshine;
+
 		currentYear++; 
-		return null;
+		return e;
 	}
-
-
 
 	
-	public Forest applyTo(Forest f)
+
+	/*
+	public ClimateModel(ArrayList<Environment> conditions, boolean cyclic)
 	{
-		if(this.cyclic && conditions.size > currentYear)
-		{
-				currentYear = 0;
-		}
-		else if (conditions.size > currentYear)
-		{
-			//Default factors
-			f.environmentalFactors = EnvironmentalFactors(1,1,1,1);
-			currentYear++;
-		}
-
-		
-		f.environmentalFactors = conditions.get(this.currentYear).environmentalFactors;
-		currentYear++; 
-		return Forest;
+		this.specialCases = specialCases;
+		this.conditions = conditions;
+		this.currentYear = 0;
+		this.cyclic = cyclic;
 	}
+	*/
 
 
-	public ClimateModel(ArrayList<Forest> conditions, boolean cyclic)
+	public ClimateModel (ArrayList<Environment> conditions, boolean cyclic)
 	{
 		this.conditions = conditions;
 		this.currentYear = 0;

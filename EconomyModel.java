@@ -4,29 +4,35 @@ public class EconomyModel extends Model<Economy>
 
 
 
-
-
 	public Economy applyTo(Economy e)
 	{
-		if(this.cyclic && conditions.size > currentYear)
+		if(this.cyclic && conditions.size() > currentYear)
 		{
 				currentYear = 0;
 		}
-		else if (conditions.size > currentYear)
+		else if (conditions.size() > currentYear)
 		{
 			//Default factors
-			f.Economy = Economy(1,1,1,1);
+			
 			currentYear++;
+			return e;
 		}
 
-		
-		f.environmentalFactors = conditions.get(this.currentYear).environmentalFactors;
+
+
+		Economy condition = conditions.get(this.currentYear);
+		e.capital = e.capital * condition.capital;
+		e.losses = e.losses * condition.losses;
+		e.interest = e.interest * condition.interest;
+		//Interest
+		e.losses = e.losses * e.interest;
+
 		currentYear++; 
-		return Economy;
+		return e;
 	}
 
 
-	public ClimateModel(ArrayList<Economy> conditions, boolean cyclic)
+	public EconomyModel(ArrayList<Economy> conditions, boolean cyclic)
 	{
 		this.conditions = conditions;
 		this.currentYear = 0;

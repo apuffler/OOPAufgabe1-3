@@ -2,7 +2,7 @@ import java.util.ArrayList;
 public abstract class Model<T> {	
 
 	//Conditions over years in form of (currently either a forest or an economy)
-	private ArrayList<T> conditions;
+	public ArrayList<T> conditions;
 	//int is the year in which this specialCondition will be applied, Object T will encorporate this specialCondition.
 	//For example: If there is a ForestFire, the number of trees will be reduced to 0.
 	//private HashMap<int, SpecialCase> specialConditions;

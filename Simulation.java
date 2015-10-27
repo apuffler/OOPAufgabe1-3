@@ -32,8 +32,9 @@ public class Simulation{
 	}
 
 	public void runSimulation() {
-		this.forest = this.economyModel.applyTo(this.forest);
-		this.forest = this.climateModel.applyTo(this.forest);
+		//TODO: Take economy from forest and apply
+		//this.forest = this.economyModel.applyTo(this.forest);
+		this.forest = this.climateModel.applyTo(this.forest.env);
 
 		forest.updateForest();
 	}
