@@ -38,8 +38,12 @@ public class Simulation{
 	public void runSimulation() {
 		this.currentForest.eco = this.economyModel.applyTo(this.currentForest.eco);
 		this.currentForest.env = this.climateModel.applyTo(this.currentForest.env);
-		this.forestTimeLine.add(this.currentForest.clone());
+		this.forestTimeLine.add(this.currentForest.makeCopy());
 		
-		this.currentForest.updateForest();
+		this.currentForest.updateForest(this.currentForest.env);
+	}
+
+	public Forest getCurrentForest(){
+		return this.currentForest;
 	}
 }
