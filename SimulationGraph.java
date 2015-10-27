@@ -1,7 +1,9 @@
 import java.util.LinkedList;
 import javax.swing.JPanel;	
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.geom.Line2D;
 
 abstract class SimulationGraph extends JPanel{
 	protected LinkedList<Pair<Double, Double>> graphValues;	
@@ -99,10 +101,13 @@ abstract class SimulationGraph extends JPanel{
 	}
 
 	public void paintComponent(Graphics g){
-		g.translate(20, this.graphHeight - 20);
-		//g.rotate(Math.PI);	
-		//g.setBackground(this.graphBackgroundColor);
-		//g.setColor(this.visualizationColor);
+		Graphics2D g2D = (Graphics2D)g;
+
+		g2D.translate(0, this.graphHeight);
+		g2D.rotate(Math.toRadians(-90));
+
+		g2D.translate(20, 20);
+
 
 		this.drawGraph(g);
 	}
