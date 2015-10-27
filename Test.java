@@ -1,456 +1,74 @@
 import java.util.ArrayList;
 /*
 Erste Überlegungen zur Herangehensweise sowie Diskussion über das Verständnis der Angabe erfolgten als Teamarbeit.
-Armin Puffler (1225268): Klassendiagramm, Arbeitsaufteilung, Test.java, Refakoring: toString() zu Forest hinzugefügt. Fixed table inconsistency. Added getYear(). More tests ( I know, could be more elegant.)	
-Jovan Zivanovic (1426514): Wood.java, LivingWood.java, CO2.java, DeadWood.java. 
-Stefan Buttenhauser (0926720): Forest.java, HarvestedWood.java, Exceptions hinzugefügt, Bugfixes zur Verhinderung von Negativwerten
+Armin Puffler (1225268):
+Jovan Zivanovic (1426514):
+Stefan Buttenhauser (0926720): Forest.java, YoungForest.java, RelaxationForest.java, EnergyForest.java, MixedForest.java, Test.java
 
 */
 
 
 public class Test
 {
-	
-
-
-	public static boolean  zeroSumTest(Forest f)
-	{
-		int co2zero = f.getBoundCO2() - (f.getHarvestedWood() + f.getLivingWood() + f.getDeadWood());  
-		return co2zero == 0;
-	}
-
-	public static boolean nonNegativeTest(Forest f)
-	{
-		return f.getLivingWood() >= 0 && f.getDeadWood() >= 0 && f.getHarvestedWood() >= 0 && f.getTotallyUsedWood() >= 0;  
-	}
-
-
 
 	public static void main(String[] args)
 	{
 
-
 		boolean passed = true;
 
-
-		System.out.println("Testing negative parameters.");
-		{
-			LivingWood l = null;
-			DeadWood d = null;
-			HarvestedWood h = null;
-			Forest f = null;
-		try
-		{
-		 l = new LivingWood(-1,-1);
+		ArrayList<Environment> cliarray = new ArrayList<Environment>();
+		for(float f = 1.0f; f < 1.4f; f = f + 0.01f){
+			cliarray.add(new Environment(f, f, f, f));
 		}
-		catch (Exception ex)
-		{
-			System.out.println(ex);
-			passed = false;
-		}	
+		ClimateModel cliMod = new ClimateModel(cliarray, true);
 
-		try
-		{
-		  d = new DeadWood(-1,-1,-1F); 
+		ArrayList<Economy> ecoarry = new ArrayList<Economy>();
+		for(float i = 1; i < 2050; i = i + 50){
+			ecoarry.add(new Economy(i, i, i));
 		}
-		catch (Exception ex)
-		{
-			System.out.println(ex);
-			passed = false;
-		}	
+		EconomyModel ecoMod = new EconomyModel(ecoarry, true);
 
-		try
-		{
-		  h = new HarvestedWood(-1,-1,-1F);
-		}
-		catch (Exception ex)
-		{
-			System.out.println(ex);
-			passed = false;
-		}		
+		Environment env = new Environment(1,1,1,1);
+		Economy eco = new Economy(0,0,0);
 
+		YoungForest yf = new YoungForest(225, 0, 0, 0, env, eco);
+		RelaxationForest rf = new RelaxationForest(225, 0, 0.3f, 0, env, eco);
+		EnergyForest ef = new EnergyForest(225, 0, 0.3f, 0, env, eco);
+		MixedForest mf = new MixedForest(225, 0, 0.3f, 0, env, eco);
 
-		try
-		{
-		  if(l != null && d != null && h != null)
-		  {	
-		  		f = new Forest(l,d,h);
-		  		for(int i = 0; i<10; i++)
-				{
-					f.updateForest();
-					passed = passed && zeroSumTest(f);
-					passed = passed && nonNegativeTest(f);
-				}
-		  }
-		}
-		catch (Exception ex)
-		{
-			System.out.println(ex);
-			passed = false;
-		}	
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-		
-		
-		System.out.println(f.getOutputTable());
+		Simulation yfsimulation = new Simulation(ecoMod, cliMod, yf);
+		Simulation rfsimulation = new Simulation(ecoMod, cliMod, rf);
+		Simulation efsimulation = new Simulation(ecoMod, cliMod, ef);
+		Simulation mfsimulation = new Simulation(ecoMod, cliMod, mf);
+
+		ScatterGraph yfscatter = new ScatterGraph();
+		ScatterGraph rfscatter = new ScatterGraph();
+		ScatterGraph efscatter = new ScatterGraph();
+		ScatterGraph mfscatter = new ScatterGraph();
+
+		for(int i = 0; i <= 41; i++){
+			yfsimulation.runSimulation();
+			rfsimulation.runSimulation();
+			efsimulation.runSimulation();
+			mfsimulation.runSimulation();
+			//System.out.println("YF: LivingWood: " + yfsimulation.getCurrentForest().livingWoodAmount + ", DeadWood: " + yfsimulation.getCurrentForest().deadWoodAmount);
+			//System.out.println("RF: LivingWood: " + rfsimulation.getCurrentForest().livingWoodAmount + ", totallyUsedWood: " + rfsimulation.getCurrentForest().totallyUsedWood);
+			//System.out.println("EF: LivingWood: " + efsimulation.getCurrentForest().livingWoodAmount + ", totallyUsedWood: " + efsimulation.getCurrentForest().totallyUsedWood);
+			//System.out.println("MF: LivingWood: " + mfsimulation.getCurrentForest().livingWoodAmount + ", totallyUsedWood: " + mfsimulation.getCurrentForest().totallyUsedWood);
+
+			// youngForest and relaxationForest are looking good, energyForest and mixedForest are shrinking (rework formulas)
+			// the climateModel never changes the values
+
+			yfscatter.addData((double)yfsimulation.getCurrentForest().livingWoodAmount, (double)yfsimulation.getCurrentForest().deadWoodAmount);
+			rfscatter.addData((double)rfsimulation.getCurrentForest().livingWoodAmount, (double)rfsimulation.getCurrentForest().totallyUsedWood);
+			efscatter.addData((double)efsimulation.getCurrentForest().livingWoodAmount, (double)efsimulation.getCurrentForest().totallyUsedWood);
+			mfscatter.addData((double)mfsimulation.getCurrentForest().livingWoodAmount, (double)mfsimulation.getCurrentForest().totallyUsedWood);
 		}
 
-		
-
-
-		System.exit(0);
-
-		System.out.println("Testing Harvestedwood: amount=1,harvest=1,usage=1F");
-		
-		{
-		
-		LivingWood l = new LivingWood(0,0);
-		DeadWood d = new DeadWood(0,0,0F); 
-		HarvestedWood h = new HarvestedWood(1,1,1F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			System.out.println(passed);
-			passed = passed && nonNegativeTest(f);
-			System.out.println(passed);
-
-		}
-		System.out.println(f.getOutputTable());
-		}
-
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-
-
-		System.out.println("Testing Harvestedwood: amount=1,addition=1,decay=1F");
-		
-		{
-		//If decay per year is 100%, why is there still deadWood left? Revisit order of operation, eg. decay or addition first?
-		//Also, HarvestedWood goes negative!
-		LivingWood l = new LivingWood(0,0);
-		DeadWood d = new DeadWood(1,1,1F); 
-		HarvestedWood h = new HarvestedWood(0,0,0F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-
-		System.out.println("Testing: all parameters are 0");
-		{
-		//All 0 Edge Case
-		LivingWood l = new LivingWood(0,0);
-		DeadWood d = new DeadWood(0,0,0.0F);
-		HarvestedWood h = new HarvestedWood(0,0,0F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-
-
-		System.out.println("Testing: all parameters are 1");
-		{
-		//All 1 Edge Case
-		LivingWood l = new LivingWood(1,1);
-		DeadWood d = new DeadWood(1,1,1F);
-		HarvestedWood h = new HarvestedWood(1,1,1F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-
-
-		//Tests below this point reveal bugs!
-		//=====================================================
-
-
-		System.out.println("Testing: Changing parameters between two simulation runs.");
-		//Changing Parameters between two updates
-		{
-		LivingWood l = new LivingWood(10,2);
-		DeadWood d = new DeadWood(1,1,1F);
-		HarvestedWood h = new HarvestedWood(1,1,1F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<=5; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		f.setHarvestPerYear(1000);
-		for(int i = 0; i<=5; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-
-		System.out.println("Testing Harvestedwood: amount=1,addition=1,decay=0F");
-		{
-		//Negative values still appear in LivingWood
-		LivingWood l = new LivingWood(0,0);
-		DeadWood d = new DeadWood(0,0,0.0F);
-		HarvestedWood h = new HarvestedWood(1,1,0F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-		System.out.println("Testing mixed parameters.");
-		{
-		//Harvestedwood is decreasing (since it's been used) but never releasing CO2.
-		LivingWood l = new LivingWood(1,0);
-		DeadWood d = new DeadWood(0,0,0.0F);
-		HarvestedWood h = new HarvestedWood(1,0,0.5F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-
-		System.out.println("Testing Deadwood: amount=2,addition=0,decay=0.1F. Relevant for proper decay testing.");
-		{
-		//Deadwood is decreasing (since it's decaying) but never releasing CO2.
-		LivingWood l = new LivingWood(0,0);
-		DeadWood d = new DeadWood(2,0,0.1F);
-		HarvestedWood h = new HarvestedWood(0,0,0.0F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-		System.out.println("Testing Deadwood: amount=0,addition=2,decay=0.0F. Relevant for Livingwood decease testing.");
-		{
-		//Livingwood never gets decreased even though DeadWood is gaining amount.
-		LivingWood l = new LivingWood(10,0);
-		DeadWood d = new DeadWood(0,2,0.0F);
-		HarvestedWood h = new HarvestedWood(0,0,0.0F);
-		Forest f = new Forest(l,d,h);
-		for(int i = 0; i<10; i++)
-		{
-			f.updateForest();
-			passed = passed && zeroSumTest(f);
-			passed = passed && nonNegativeTest(f);
-		}
-		System.out.println(f.getOutputTable());
-		}
-		if(!passed)
-		{
-			System.out.println("TEST NOT PASSED!");
-			return;
-		}
-
-		if(passed)
-		{
-			System.out.println("PASSED ALL TESTS!");
-			return;
-		}
-
-		
-	
-		
-
-
-		//Mass Testing
-		boolean mass_testing = false;
-		if (mass_testing)
-		{
-			int testSize = 4;
-
-			ArrayList<LivingWood> lwTests = new ArrayList<LivingWood>();
-			for(int amount = 0; amount < testSize; amount++)
-			{
-				for(int addition = 0; addition < testSize; addition++)
-				{
-				lwTests.add(new LivingWood(amount*100,addition*3));
-				}
-			}
-
-			ArrayList<DeadWood> dwTests = new ArrayList<DeadWood>();
-			for(int amount = 0; amount < testSize; amount++)
-			{
-				for(int addition = 0; addition < testSize; addition++)
-				{
-					for(float decay = 0F; decay <= 1; decay = decay + 0.1F)
-					{
-					dwTests.add(new DeadWood(amount,addition,decay*0));
-					}
-				}
-			}
-
-			ArrayList<HarvestedWood> hwTests = new ArrayList<HarvestedWood>();
-			for(int amount = 0; amount < testSize; amount++)
-			{
-				for(int harvest = 0; harvest < testSize; harvest++)
-				{
-					for(float usage = 0F; usage <= 1; usage = usage + 0.1F)
-					{
-					hwTests.add(new HarvestedWood(amount,harvest,usage*0));
-					}
-				}
-			}
-
-			
-
-
-			ArrayList<Forest> forestTests = new ArrayList<Forest>();
-			
-			int lwIndex = 0;
-			int dwIndex = 0;
-			int hwIndex = 0;
-			
-			for(int forests = 0; forests < lwTests.size()*dwTests.size(); forests++) //*hwTests.size()
-			{
-
-				forestTests.add(new Forest(lwTests.get(lwIndex), dwTests.get(dwIndex), hwTests.get(hwIndex)));
-				lwIndex = (lwIndex+1 > lwTests.size() ? 0 : lwIndex);
-				dwIndex = (dwIndex+1 > dwTests.size() ? 0 : dwIndex);
-				hwIndex = (hwIndex+1 > hwTests.size() ? 0 : dwIndex);
-			}
-
-			System.out.println("Finished generating.");
-
-			int updates = 2;
-			int sub = 0;
-			int progress = 1;
-
-			try
-			{
-			for (Forest f : forestTests)
-			{
-				System.out.println("normal: " + progress + "/" + forestTests.size());
-				for (int i = 0; i<= updates; i++)
-				{
-					f.updateForest();
-				}
-				progress++;
-			}
-			System.out.println("Finished normal update.");
-
-
-			progress = 0;
-			//Changing parameters while Emulation is running
-			for (Forest f : forestTests)
-			{
-				System.out.println("change: " + progress);
-				f.setHarvestedWood(f.getHarvestedWood() - sub);	
-				for (int i = 0; i<= updates; i++)
-				{
-					f.updateForest();
-				}
-				progress++;
-			}
-
-
-			System.out.println("Finished change harvest.");
-			progress = 0;
-			for (Forest f : forestTests)
-			{
-				System.out.println("decay: " + progress);
-				f.setDeadDecay(f.getDeadDecay()- sub);	
-				for (int i = 0; i<= updates; i++)
-				{
-					f.updateForest();
-				}
-				progress++;
-			}
-
-			System.out.println("Finished change decay.");
-		}
-		catch(Exception e)
-		{
-			System.out.println(e);
-		}
-
-			
-		}
-
-				
-
-
-
-
-		
+		GraphVisualizer yfv = new GraphVisualizer(yfscatter);
+		GraphVisualizer rfv = new GraphVisualizer(yfscatter);
+		GraphVisualizer efv = new GraphVisualizer(yfscatter);
+		GraphVisualizer mfv = new GraphVisualizer(yfscatter);
 	}
 
 }
