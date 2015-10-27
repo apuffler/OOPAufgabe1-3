@@ -21,7 +21,7 @@ public class LineGraph extends SimulationGraph{
 			double x2 = coordinates2.getFirst();
 			double y2 = coordinates2.getSecond();
 
-			g2D.draw(new Line2D.Double(y1, x1, y2, x2));
+			g2D.draw(new Line2D.Double(x1, y1, x2, y2));
 
 			coordinates1 = coordinates2;	
 		}
