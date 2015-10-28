@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 /*
 Erste Überlegungen zur Herangehensweise sowie Diskussion über das Verständnis der Angabe erfolgten als Teamarbeit.
-Armin Puffler (1225268):
+Armin Puffler (1225268): Weitere Planung, Klassendiagramm, Model.java, ClimateModel.java, EconomyModel.java, Environment.java
 Jovan Zivanovic (1426514): SimulationSupervisor.java, Simulation.java, SimulationGraph.java, LineGraph.java, ScatterGraph.java, GraphVisualizer.java
 Stefan Buttenhauser (0926720): Forest.java, YoungForest.java, RelaxationForest.java, EnergyForest.java, MixedForest.java, Test.java
 
