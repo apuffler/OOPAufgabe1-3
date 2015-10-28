@@ -22,7 +22,7 @@ public class ClimateModel extends Model<Environment>
 		{
 				currentYear = 0;
 		}
-		else if (conditions.size() > currentYear)
+		if (! this.cyclic && conditions.size() > currentYear)
 		{
 			//Default factors
 			currentYear++;

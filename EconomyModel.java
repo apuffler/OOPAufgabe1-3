@@ -6,14 +6,16 @@ public class EconomyModel extends Model<Economy>
 
 	public Economy applyTo(Economy e)
 	{
+
+
+
 		if(this.cyclic && conditions.size() > currentYear)
 		{
 				currentYear = 0;
 		}
-		else if (conditions.size() > currentYear)
+		if (!this.cyclic && conditions.size() > currentYear)
 		{
 			//Default factors
-			
 			currentYear++;
 			return e;
 		}
