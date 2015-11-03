@@ -1,10 +1,17 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+/*
+ *GOOD: Dynamic Binding used to inherit Model
+ */
 public class ClimateModel extends Model<Environment>
 {
 
 	
-	//Argument must not be NULL
+	/**
+	 * Method applyTo applies conditions to the given Environment 
+ 	 * BAD: Strong(ish) coupling
+ 	 * @param (e): Environment e must not be NULL
+ 	 */
 	public Environment applyTo(Environment e)
 	{
 		
@@ -19,7 +26,6 @@ public class ClimateModel extends Model<Environment>
 			return e;
 		}
 
-		//this.currentYear must at least have 1 entry 
 		Environment condition  = conditions.get(this.currentYear);
 		e.temperature = e.temperature * condition.temperature;
     	e.precipitation = e.temperature * condition.temperature;
@@ -30,8 +36,12 @@ public class ClimateModel extends Model<Environment>
 		return e;
 	}
 
-
-	//ArrayList<Environment> must not be NULL
+	/**
+	 * ClimateModel represents the change of Climate over time.
+ 	 * BAD: Strong(ish) coupling
+ 	 * @param (conditions):  ArrayList<Environment> conditions must not be NULL and have at least one entry
+ 	 * @param (cyclic): 
+ 	 */
 	public ClimateModel (ArrayList<Environment> conditions, boolean cyclic)
 	{
 		this.conditions = conditions;
