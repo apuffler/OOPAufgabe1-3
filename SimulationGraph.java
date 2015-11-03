@@ -59,7 +59,12 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphValues;
 	}
 
-	//ASSERT: Given Double-Values are expected to be greater than null
+	/**
+	 *Method used to add an Data-Entry intor the GraphList
+	 *
+	 *@param (x) Value for the X-Axis;
+	 *@param (y) Value for the Y-Axis;
+	 */
 	public void addData(double x, double y){
 		this.graphValues.add(new Pair<Double, Double>(x, y));
 	}
@@ -68,7 +73,11 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphWidth;
 	}
 
-	//ASSERT: Given Integer is expected to be greater than zero 
+	/**
+	 *Method used to set the width of the drawn graph
+	 *
+	 *@param (graphWidth) Value for the Graph-Width; Expected to be > 0;
+	 */
 	public void setGraphWidth(int graphWidth){
 		this.graphWidth = graphWidth;
 	}
@@ -77,7 +86,11 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphHeight;
 	}
 
-	//ASSERT: Given Integer is expected to be greaater than zero
+	/**
+	 *Method used to set the height of the drawn graph
+	 *
+	 *@param (graphHeight) Value for the Graph-Height; Expected to be > 0;
+	 */
 	public void setGraphHeigth(int graphHeight){
 		this.graphHeight = graphHeight;
 	}
@@ -86,7 +99,11 @@ abstract class SimulationGraph extends JPanel{
 		return this.yAxisScale;
 	}
 
-	//ASSERT: Given Double is expected not to be zero
+	/**
+	 *Method used to set the scaling of the y-Axis
+	 *
+	 *@param (yAxisScale) Value for the y-Scaling; Expected to be > 0; If == 0 then all drawn values will have y = 0; If < 0 the graph is turned upside down
+	 */
 	public void setYAxisScale(double yAxisScale){
 		this.yAxisScale = yAxisScale;
 	}
@@ -95,7 +112,12 @@ abstract class SimulationGraph extends JPanel{
 		return this.xAxisScale;
 	}
 
-	//ASSERT: Given Double is expected not to be zero
+
+	/**
+	 *Method used to set the scaling of the x-Axis
+	 *
+	 *@param (xAxisScale) Value for the x-Scaling; Expected to be > 0; If == 0 then all drawn values will have x = 0; If < 0 the graph is flipped
+	 */
 	public void setXAxisScale(double xAxisScale){
 		this.xAxisScale = xAxisScale;
 	}
@@ -104,7 +126,12 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphBackgroundColor;
 	}
 
-	//ASSERT: Given Color is expected not to be null
+
+	/**
+	 *Method used to set the Background-Color of the Graph
+	 *
+	 *@param (backgroundColor) Expected to be != NULL;
+	 */
 	public void setBackgroundColor(Color backgroundColor){
 		this.graphBackgroundColor = backgroundColor;
 	}
@@ -113,12 +140,15 @@ abstract class SimulationGraph extends JPanel{
 		return this.visualizationColor;
 	}
 
-	//ASSERT: Given  Color is expected not to be null
+	/**
+	 *Method used to set the Color of Graph
+	 *
+	 *@param (graphColor) Expected to be != NULL, otherwise the paintComponent-Method would throw an exception
+	 */
 	public void setGraphColor(Color graphColor){
 		this.visualizationColor = graphColor;
 	}
 
-	//scaleData erzeugt ein neues LinkedList-Objekt, welches die skalierten Datenwerte für den Graphen enthält
 	private void scaleData(){
 		LinkedList<Pair<Double, Double>> newValues = new LinkedList<Pair<Double, Double>>();
 		for(int i = 0; i < this.graphValues.size(); ++i){
@@ -128,6 +158,12 @@ abstract class SimulationGraph extends JPanel{
 		this.scaledValues = newValues;
 	}
 
+	//BAD: Graphics-Object needs to be passed, would be better if implemented in the paintComponent-Method
+	/**
+	 *Method used to draw markers on the x- and the y-axis
+	 *
+	 *@param (g) Expected to be != NULL, otherwise would throw exception;
+	 */
 	private void axisInformation(Graphics g){
 		Graphics2D g2D = (Graphics2D)g;
 
@@ -141,6 +177,11 @@ abstract class SimulationGraph extends JPanel{
 		}
 	}
 
+	/**
+	 *Method used to draw the Graph on a panel
+	 *
+	 *@param (g) Expected to be != NULL, otherwise would throw exception;
+	 */
 	public void paintComponent(Graphics g){
 		this.scaleData();
 
