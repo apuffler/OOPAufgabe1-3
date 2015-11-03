@@ -3,33 +3,23 @@ import java.util.HashMap;
 public class ClimateModel extends Model<Environment>
 {
 
-	//TODO: Still need to implement Special Cases
-
-	//private HashMap<int, Forest> specialCases = null;
-
-
+	
+	//Argument must not be NULL
 	public Environment applyTo(Environment e)
 	{
-		/*
-		Forest special = 0; 
-		if specialCases != null
-		{
-			special = specialCases.get(currentYear);
-			if special != null
-		}
-		*/
+		
 		if(this.cyclic && conditions.size() > currentYear)
 		{
 				currentYear = 0;
 		}
 		if (! this.cyclic && conditions.size() > currentYear)
 		{
-			//Default factors
+			
 			currentYear++;
 			return e;
 		}
 
-		
+		//this.currentYear must at least have 1 entry 
 		Environment condition  = conditions.get(this.currentYear);
 		e.temperature = e.temperature * condition.temperature;
     	e.precipitation = e.temperature * condition.temperature;
@@ -40,19 +30,8 @@ public class ClimateModel extends Model<Environment>
 		return e;
 	}
 
-	
 
-	/*
-	public ClimateModel(ArrayList<Environment> conditions, boolean cyclic)
-	{
-		this.specialCases = specialCases;
-		this.conditions = conditions;
-		this.currentYear = 0;
-		this.cyclic = cyclic;
-	}
-	*/
-
-
+	//ArrayList<Environment> must not be NULL
 	public ClimateModel (ArrayList<Environment> conditions, boolean cyclic)
 	{
 		this.conditions = conditions;
