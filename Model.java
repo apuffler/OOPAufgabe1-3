@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+
+//GOOD: Using abstract classes to simplify.
 public abstract class Model<T> {	
 
 	/*
@@ -8,11 +10,17 @@ public abstract class Model<T> {
 	Special Cases are not yet implemented.
 	*/
 
+
+	
 	public ArrayList<T> conditions;
 	public int currentYear;
 	public boolean cyclic;
 
-	//T must not be NULL!
+	/**
+	 * Method applyTo applies a given Object to another and returns such. 
+ 	 * GOOD: Using abstract methods to simplify.
+ 	 * @param (t): T t must not be NULL
+ 	 */
 	public abstract T applyTo(T t);
 
 

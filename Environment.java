@@ -5,7 +5,15 @@ public class Environment{
     public  float humidity;
     public  float sunshine;
 
-    //Arguments should not be negative!
+ 
+    /**
+	 * Environment represents environmental factors in a point in time. 
+ 	 * GOOD: Weak coupling
+ 	 * @param (temperature): float temperature must be >= 0
+ 	 * @param (precipitation):  float precipitation must be >= 0
+ 	 * @param (humidity):  float humidity must be >= 0
+ 	 * @param (sunshine):  float sunshine must be >= 0
+ 	 */
     public Environment(float temperature, float precipitation, float humidity, float sunshine)
     {
         this.temperature = temperature;
