@@ -1,6 +1,9 @@
 
 public class EnergyForest extends Forest {
 
+    /**
+     * Default constructor of the EnergyForest class, calls the constructor of the parent class forest
+     */
     public EnergyForest(){
         super();
     }
@@ -10,10 +13,21 @@ public class EnergyForest extends Forest {
         this.relaxationValue = 1;
     }
 
+    /**
+     * Returns a copy of the current EnergyForest (it's a copy constructor in method form, because an abstract class can't have a copy constructor)
+     *
+     * @return (YoungForest)
+     */
     public EnergyForest makeCopy(){
         return new EnergyForest(this.livingWoodAmount, this.harvestedWoodAmount, this.harvestedWoodUsagePerYear, this.deadWoodAmount, this.env, this.eco);
     }
 
+    /**
+     * Updates the changes in the forest during one time period: calculates the increase/decrease of livingWood, harvestedWood, deadWood
+     * as well as the amount of totallyUsedWood and boundCO2
+     *
+     * @param (e) Variable of Type Environment, used to influence the rate of growth in the forest
+     */
     public void updateForest(Environment e){
         if(this.livingWoodAmount == 1) // log(1) = 0 so we have to tweak it a little
             this.livingWoodAmount++;
