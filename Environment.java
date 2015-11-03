@@ -5,7 +5,7 @@ public class Environment{
     public  float humidity;
     public  float sunshine;
 
-
+    //Arguments should not be negative!
     public Environment(float temperature, float precipitation, float humidity, float sunshine)
     {
         this.temperature = temperature;
