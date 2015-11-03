@@ -3,6 +3,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
 public class LineGraph extends SimulationGraph{
+	/**
+	 *Method used to draw a LinePlot
+	 *
+	 *@param (g) Expected to be != NULL, otherwise would throw exception;
+	 */
 	public void drawGraph(Graphics g){
 		Graphics2D g2D = (Graphics2D)g;
 
