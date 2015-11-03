@@ -59,6 +59,7 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphValues;
 	}
 
+	//ASSERT: Given Double-Values are expected to be greater than null
 	public void addData(double x, double y){
 		this.graphValues.add(new Pair<Double, Double>(x, y));
 	}
@@ -67,6 +68,7 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphWidth;
 	}
 
+	//ASSERT: Given Integer is expected to be greater than zero 
 	public void setGraphWidth(int graphWidth){
 		this.graphWidth = graphWidth;
 	}
@@ -75,6 +77,7 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphHeight;
 	}
 
+	//ASSERT: Given Integer is expected to be greaater than zero
 	public void setGraphHeigth(int graphHeight){
 		this.graphHeight = graphHeight;
 	}
@@ -83,6 +86,7 @@ abstract class SimulationGraph extends JPanel{
 		return this.yAxisScale;
 	}
 
+	//ASSERT: Given Double is expected not to be zero
 	public void setYAxisScale(double yAxisScale){
 		this.yAxisScale = yAxisScale;
 	}
@@ -91,6 +95,7 @@ abstract class SimulationGraph extends JPanel{
 		return this.xAxisScale;
 	}
 
+	//ASSERT: Given Double is expected not to be zero
 	public void setXAxisScale(double xAxisScale){
 		this.xAxisScale = xAxisScale;
 	}
@@ -99,6 +104,7 @@ abstract class SimulationGraph extends JPanel{
 		return this.graphBackgroundColor;
 	}
 
+	//ASSERT: Given Color is expected not to be null
 	public void setBackgroundColor(Color backgroundColor){
 		this.graphBackgroundColor = backgroundColor;
 	}
@@ -107,10 +113,12 @@ abstract class SimulationGraph extends JPanel{
 		return this.visualizationColor;
 	}
 
+	//ASSERT: Given  Color is expected not to be null
 	public void setGraphColor(Color graphColor){
 		this.visualizationColor = graphColor;
 	}
 
+	//scaleData erzeugt ein neues LinkedList-Objekt, welches die skalierten Datenwerte für den Graphen enthält
 	private void scaleData(){
 		LinkedList<Pair<Double, Double>> newValues = new LinkedList<Pair<Double, Double>>();
 		for(int i = 0; i < this.graphValues.size(); ++i){
